@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>Budi's Project | Live text Editor</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="codemirror.css">
+	<link rel="stylesheet" href="simple-hint.css">	
+	<script type="text/javascript" src="codemirror.js"></script>
+	<script type="text/javascript" src="javascript.js"></script>
+	<script type="text/javascript" src="css.js"></script>
+	<script type="text/javascript" src="xml.js"></script>
+	<script type="text/javascript" src="htmlmixed.js"></script>
+	<script type="text/javascript" src="simple-hint.js"></script>
+	<script type="text/javascript" src="zen_codemirror.js"></script>
+	<script type="text/javascript" src="downloadify.min.js"></script>
+	<script type="text/javascript" src="swfobject.js"></script>
+</head>
+<body>
+	<div id="header">
+		<a href="http://budisproject.blogspot.com/" id="logo"><img src="b.png" alt="Budi's Project | Live text Editor"></a>
+		<h2 id="judul">HTML & CSS Preview by Budi's Project</h2>
+		<div id="toolbar">
+			<div id="editor-toolbar">
+				<h2><span class="icon">N</span>Editor</h2>
+				<ul>
+					<li id="download">Download</li>
+				</ul>
+			</div>
+			<div id="preview-toolbar">
+				<h2><span class="icon">P</span>Preview</h2>
+			</div>
+		</div>
+
+		<div class="clearfix"></div>
+	</div>
+	<div id="ide">
+		<div id="editor">
+			<div class="container">
+				<textarea name="" id="editor-area" cols="30" rows="10"></textarea>
+			</div>
+		</div>
+		<div id="preview">
+			<div class="container">
+				<iframe src frameborder="0" id="preview-area"></iframe>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+	
+      var delay;
+      // Initialize CodeMirror editor with a nice html5 canvas demo.
+      var editor = CodeMirror.fromTextArea(document.getElementById('editor-area'), {
+        mode: 'text/html',
+        tabSize:8,
+        indentUnit:8,
+        matchBrackets: true,
+        lineNumbers:true,
+        onChange: function() {
+          clearTimeout(delay);
+          delay = setTimeout(updatePreview, 300);
+        },
+       	onKeyEvent: function() {
+			return zen_editor.handleKeyEvent.apply(zen_editor, arguments);
+		}
+      });
+      
+      function updatePreview() {
+        var previewFrame = document.getElementById('preview-area');
+        var preview =  previewFrame.contentDocument ||  previewFrame.contentWindow.document;
+        preview.open();
+        preview.write(editor.getValue());
+        preview.close();
+      }
+      setTimeout(updatePreview, 300);
+    	
+	  Downloadify.create('download',{
+	    filename: "index.html",
+	    data: function(){ 
+	      return editor.getValue();
+	    },
+	    onComplete: function(){ 
+	      alert('File anda berhasil di simpan'); 
+	    },
+	    onCancel: function(){ 
+	      alert('data anda belum di simpan, apakah ingin keluar');
+	    },
+	    onError: function(){ 
+	      alert('You must put something in the File Contents or there will be nothing to save!'); 
+	    },
+	    transparent: false,
+	    swf: 'downloadify.swf',
+	    downloadImage:'download.png',
+	    width: 100,
+	    height: 30,
+	    transparent: true,
+	    append: false
+	  });
+	</script>
+</body>
+</html>
